@@ -1,5 +1,6 @@
 # TA577 PCAP Investigation Walkthrough
 
+
 This walkthrough documents the **step-by-step analyst workflow** used to investigate suspected **TA577 activity** using only a packet capture (PCAP).  
 The goal is to show **how conclusions were reached**, not just the final result.
 
