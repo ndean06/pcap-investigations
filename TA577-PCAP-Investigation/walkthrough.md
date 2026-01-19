@@ -143,9 +143,6 @@ This timing pattern is characteristic of **command-and-control beaconing** rathe
 
 After identifying suspicious domains and IP addresses through PCAP analysis, open-source intelligence (OSINT) was used to **validate and contextualize** the observed indicators.
 
-> OSINT was used to support attribution and infrastructure analysis only.  
-> All conclusions remain grounded in the network behavior observed in the PCAP.
-
 ---
 
 ### Domain Reputation Analysis
