@@ -6,7 +6,7 @@ The goal is to show **how conclusions were reached**, not just the final result.
 
 ---
 
-## Step 1 — Investigation Preparation & PCAP Overview
+## Step 1 Investigation Preparation & PCAP Overview
 
 Before analysis, the PCAP was validated to understand capture scope, timing, and integrity.
 
@@ -20,7 +20,7 @@ This confirmed:
 
 ---
 
-## Step 2 — Protocol Hierarchy Review
+## Step 2 Protocol Hierarchy Review
 
 A protocol hierarchy review was performed to quickly identify dominant traffic types.
 
@@ -34,7 +34,7 @@ Key observations:
 
 ---
 
-## Step 3 — Identify Top Talkers (Conversation Analysis)
+## Step 3 Identify Top Talkers (Conversation Analysis)
 
 IPv4 conversations were reviewed to identify the most active external communication.
 
@@ -47,7 +47,7 @@ This revealed:
 
 ---
 
-## Step 4 — DNS Query Analysis
+## Step 4 DNS Query Analysis
 
 DNS queries were examined to identify suspicious domain lookups.
 
@@ -60,7 +60,7 @@ Red flags:
 
 ---
 
-## Step 5 — DNS Resolution (Domain → IP Mapping)
+## Step 5 DNS Resolution (Domain → IP Mapping)
 
 DNS responses were analyzed to map suspicious domains to IP addresses.
 
@@ -74,7 +74,7 @@ This allowed correlation between:
 
 ---
 
-## Step 6 — DNS Pivot to Timeline Context
+## Step 6 DNS Pivot to Timeline Context
 
 DNS resolution timing was correlated with the incident timeline.
 
@@ -87,7 +87,7 @@ This confirmed:
 
 ---
 
-## Step 7 — HTTP Traffic Analysis (Initial Access)
+## Step 7 HTTP Traffic Analysis (Initial Access)
 
 HTTP requests were filtered to suspicious domains to identify initial access behavior.
 
@@ -101,7 +101,7 @@ Findings:
 
 ---
 
-## Step 8 — TLS Session Analysis
+## Step 8 TLS Session Analysis
 
 TLS traffic was reviewed to identify encrypted follow-on activity.
 
@@ -115,7 +115,7 @@ Key indicators:
 
 ---
 
-## Step 9 — Count Repeated TLS Connections
+## Step 9 Count Repeated TLS Connections
 
 TLS destination IPs were counted to identify repeat communication patterns.
 
@@ -128,7 +128,7 @@ This uniformity strongly suggests:
 
 ---
 
-## Step 10 — Beacon Timing Analysis
+## Step 10 Beacon Timing Analysis
 
 TLS Client Hello timestamps were analyzed to confirm periodic communication.
 
@@ -136,6 +136,79 @@ TLS Client Hello timestamps were analyzed to confirm periodic communication.
 *Figure 10 – TLS Client Hello timestamps showing consistent ~22-minute intervals.*
 
 This timing pattern is characteristic of **command-and-control beaconing** rather than user activity.
+
+---
+
+## Step 11 OSINT Validation of Network Indicators
+
+After identifying suspicious domains and IP addresses through PCAP analysis, open-source intelligence (OSINT) was used to **validate and contextualize** the observed indicators.
+
+> OSINT was used to support attribution and infrastructure analysis only.  
+> All conclusions remain grounded in the network behavior observed in the PCAP.
+
+---
+
+### 🔍 Domain Reputation Analysis
+
+#### baumbachers[.]com
+
+*VirusTotal Community & Detection Context*
+
+![VirusTotal – baumbachers.com](screenshots/11-virustotal-baumbachers.png)
+
+- Flagged by **12/93 security vendors**
+- Community comments explicitly reference **#Pikabot** and **#TA577**
+- Domain reputation aligns with previously reported Pikabot delivery campaigns
+
+This domain was observed in DNS queries and TLS SNI fields during the investigation, directly correlating OSINT data with PCAP evidence.
+
+---
+
+#### ionister[.]com
+
+*VirusTotal Detection & Community Context*
+
+![VirusTotal – ionister.com](screenshots/12-virustotal-ionister.png)
+
+- Flagged by **11/93 vendors** as malicious or phishing-related
+- Community comments reference **Pikabot-associated activity**
+- Matches domains observed during encrypted TLS communication
+
+---
+
+### IP Reputation Analysis
+
+#### 207.246.75.243 — Encrypted Communication Endpoint
+
+*AbuseIPDB*
+
+![AbuseIPDB – 207.246.75.243](screenshots/13-abuseipdb-207.246.75.243.png)
+
+- Hosted on **Vultr (commodity cloud infrastructure)**
+- No direct abuse reports at time of lookup
+
+*VirusTotal IP Reputation*
+
+![VirusTotal – 207.246.75.243](screenshots/14-virustotal-ip-207.246.75.243.png)
+
+- Flagged by **1 vendor** as malicious
+- Low detection rate is consistent with **fast-rotating C2 infrastructure**
+- Commodity hosting and low reputation signal are common traits in modern malware C2
+
+Importantly, this IP was contacted **repeatedly at regular intervals**, as demonstrated in the TLS beaconing analysis (Step 10).
+
+---
+
+### Correlation to PCAP Evidence
+
+OSINT findings directly correlate with:
+
+- DNS queries observed in **Step 4**
+- HTTP access observed in **Step 7**
+- TLS SNI values observed in **Step 8**
+- Periodic TLS Client Hello timing observed in **Step 10**
+
+While some infrastructure components show **low standalone reputation**, the **combination of network behavior + OSINT context** strongly supports attribution to **TA577 activity associated with Pikabot delivery**.
 
 ---
 
