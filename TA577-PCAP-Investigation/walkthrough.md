@@ -217,7 +217,7 @@ Based on:
 - DNS, HTTP, and TLS correlation
 - Periodic encrypted beaconing
 
-We assess with **high confidence** that the host `10.12.15.101` was compromised and engaged in **TA577-associated command-and-control activity**.
+We assess with **high confidence** that the host `10.12.15.101` was compromised and engaged in **command-and-control activity**.
 
 ---
 
