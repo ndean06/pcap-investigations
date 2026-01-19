@@ -148,7 +148,7 @@ After identifying suspicious domains and IP addresses through PCAP analysis, ope
 
 ---
 
-### 🔍 Domain Reputation Analysis
+### Domain Reputation Analysis
 
 #### baumbachers[.]com
 
